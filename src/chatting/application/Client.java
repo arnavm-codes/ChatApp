@@ -11,17 +11,17 @@ import java.io.*;
 
 /***************************************************************************************************************************/
 
-public class Server implements ActionListener
+public class Client implements ActionListener
 {
     // global declarations
     JTextField text;
-    JPanel panel2;
+    static JPanel panel2;
     static Box vertical = Box.createVerticalBox();
-    static JFrame frame= new JFrame();
     static DataOutputStream d_out;
+    static JFrame frame= new JFrame();
 
     //constructor
-    Server()
+    Client()
     {
         frame.setLayout(null);
 
@@ -96,7 +96,7 @@ public class Server implements ActionListener
 /***************************************************************************************************************************/
     // chatter name and status labels
 
-        JLabel name = new JLabel("Manoj");
+        JLabel name = new JLabel("Ranvijay");
         name.setBounds(110, 16, 100, 18);
         name.setForeground(Color.WHITE);
         name.setFont(new Font("SAN_SERIF", Font.BOLD, 18));
@@ -137,7 +137,7 @@ public class Server implements ActionListener
         // frame (window)
         frame.setSize(450, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(200,50);
+        frame.setLocation(800,50);
         frame.setUndecorated(true);
         frame.getContentPane().setBackground(Color.WHITE);
 
@@ -148,37 +148,26 @@ public class Server implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
-        try
-        {
-            String out = text.getText();
-            
-            JPanel p2 = formatLabel(out);
+        String out = text.getText();
+        
+        JPanel p2 = formatLabel(out);
 
-            panel2.setLayout(new BorderLayout());
+        panel2.setLayout(new BorderLayout());
 
-            JPanel right = new JPanel(new BorderLayout());
-            right.add(p2, BorderLayout.LINE_END);
-            vertical.add(right);
-            vertical.add(Box.createVerticalStrut(15));
+        JPanel right = new JPanel(new BorderLayout());
+        right.add(p2, BorderLayout.LINE_END);
+        vertical.add(right);
+        vertical.add(Box.createVerticalStrut(15));
 
-            panel2.add(vertical, BorderLayout.PAGE_START);
-
-            // reset textbox to empty
-            text.setText("");
-
-            d_out.writeUTF(out);
+        panel2.add(vertical, BorderLayout.PAGE_START);
 
 
-            frame.repaint();
-            frame.invalidate();
-            frame.validate();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        text.setText("");
+
+        frame.repaint();
+        frame.invalidate();
+        frame.validate();
     }
-
 
     public static JPanel formatLabel(String out)
     {
@@ -206,19 +195,18 @@ public class Server implements ActionListener
 
     public static void main(String[] arg)
     {
-        new Server();
+        new Client();
 
         try
         {
-            ServerSocket serv_socket = new ServerSocket(6001);
-            while(true)
-            {
-                Socket socket = serv_socket.accept();
-                DataInputStream d_in = new DataInputStream(socket.getInputStream());
-                d_out = new DataOutputStream(socket.getOutputStream());
+            Socket socket = new Socket("127.0.0.1", 6001);
 
-                while(true)
+            DataInputStream d_in = new DataInputStream(socket.getInputStream());
+            d_out = new DataOutputStream(socket.getOutputStream());
+
+            while(true)
                 {
+                    panel2.setLayout(new BorderLayout());
                     String message = d_in.readUTF();
                     JPanel panel = formatLabel(message);
 
@@ -227,7 +215,6 @@ public class Server implements ActionListener
                     vertical.add(left);
                     frame.validate();
                 }
-            }
         }
         catch (Exception e)
         {

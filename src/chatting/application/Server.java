@@ -1,11 +1,22 @@
 package chatting.application;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.text.*;
+
+/***************************************************************************************************************************/
 
 public class Server extends JFrame implements ActionListener
 {
+    // global declarations
+    JTextField text;
+    JPanel panel2;
+    Box vertical = Box.createVerticalBox();
+
+    //constructor
     Server()
     {
         setLayout(null);
@@ -96,17 +107,28 @@ public class Server extends JFrame implements ActionListener
 /***************************************************************************************************************************/
 
         // text box panel
-        JPanel panel2 = new JPanel();
+        panel2 = new JPanel();
         panel2.setBounds(5, 75, 440, 570);
         add(panel2);
 
 /***************************************************************************************************************************/
-
-        JTextField text = new JTextField();
+        // text box for writing
+        text = new JTextField();
         text.setBounds(5,655,310,40);
+        text.setFont(new Font("SAN_SERIF", Font.BOLD, 14));
         add(text);
 
+        //send button
+        JButton send = new JButton("Send");
+        send.setBounds(320, 655, 123, 40);
+        send.setBackground(new Color(7,94,84));
+        send.setForeground(Color.WHITE);
+        send.setFont(new Font("SAN_SERIF", Font.BOLD, 16));
+        send.addActionListener(this);
+        add(send);
 
+
+/***************************************************************************************************************************/
 
         // frame (window)
         setSize(450, 700);
@@ -118,12 +140,56 @@ public class Server extends JFrame implements ActionListener
         setVisible(true);
     }
 
+    
+    @Override
+    public void actionPerformed(ActionEvent ae) 
+    {
+        String out = text.getText();
+        
+        JPanel p2 = formatLabel(out);
+
+        panel2.setLayout(new BorderLayout());
+
+        JPanel right = new JPanel(new BorderLayout());
+        right.add(p2, BorderLayout.LINE_END);
+        vertical.add(right);
+        vertical.add(Box.createVerticalStrut(15));
+
+        panel2.add(vertical, BorderLayout.PAGE_START);
+
+
+        repaint();
+        invalidate();
+        validate();
+    }
+
+    public static JPanel formatLabel(String out)
+    {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel output = new JLabel("<html><p style=\"width: 150px\">" + out+ "</p></html>");
+        output.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        output.setBackground(new Color(37,211,102));
+        output.setOpaque(true);
+        output.setBorder(new EmptyBorder(15,15,15,50));
+        
+        panel.add(output);
+
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        JLabel time = new JLabel();
+        time.setText(sdf.format(calender.getTime()));
+
+        panel.add(time);
+
+        return panel;
+    }
+
     public static void main(String[] arg)
     {
         new Server();
     }
-
-    @Override
-    public void actionPerformed(ActionEvent ae) 
-    {}
 }
+

@@ -97,13 +97,13 @@ public class Server implements ActionListener
     // chatter name and status labels
 
         JLabel name = new JLabel("Manoj");
-        name.setBounds(110, 16, 100, 18);
+        name.setBounds(110, 16, 100, 22);
         name.setForeground(Color.WHITE);
         name.setFont(new Font("SAN_SERIF", Font.BOLD, 18));
         panel_1.add(name);
 
         JLabel status = new JLabel("Active now");
-        status.setBounds(110, 35, 100, 18);
+        status.setBounds(110, 40, 100, 18);
         status.setForeground(Color.WHITE);
         status.setFont(new Font("SAN_SERIF", Font.BOLD, 12));
         panel_1.add(status);
@@ -210,6 +210,7 @@ public class Server implements ActionListener
 
         try
         {
+            @SuppressWarnings("resource")
             ServerSocket serv_socket = new ServerSocket(6001);
             while(true)
             {

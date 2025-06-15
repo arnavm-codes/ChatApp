@@ -97,13 +97,13 @@ public class Client implements ActionListener
     // chatter name and status labels
 
         JLabel name = new JLabel("Ranvijay");
-        name.setBounds(110, 16, 100, 18);
+        name.setBounds(110, 16, 100, 22);
         name.setForeground(Color.WHITE);
         name.setFont(new Font("SAN_SERIF", Font.BOLD, 18));
         panel_1.add(name);
 
         JLabel status = new JLabel("Active now");
-        status.setBounds(110, 35, 100, 18);
+        status.setBounds(110, 40, 100, 18);
         status.setForeground(Color.WHITE);
         status.setFont(new Font("SAN_SERIF", Font.BOLD, 12));
         panel_1.add(status);
@@ -148,26 +148,37 @@ public class Client implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae) 
     {
-        String out = text.getText();
-        
-        JPanel p2 = formatLabel(out);
+        try
+        {
+            String out = text.getText();
+            
+            JPanel p2 = formatLabel(out);
 
-        panel2.setLayout(new BorderLayout());
+            panel2.setLayout(new BorderLayout());
 
-        JPanel right = new JPanel(new BorderLayout());
-        right.add(p2, BorderLayout.LINE_END);
-        vertical.add(right);
-        vertical.add(Box.createVerticalStrut(15));
+            JPanel right = new JPanel(new BorderLayout());
+            right.add(p2, BorderLayout.LINE_END);
+            vertical.add(right);
+            vertical.add(Box.createVerticalStrut(15));
 
-        panel2.add(vertical, BorderLayout.PAGE_START);
+            panel2.add(vertical, BorderLayout.PAGE_START);
+
+            d_out.writeUTF(out);
+
+            text.setText("");
 
 
-        text.setText("");
-
-        frame.repaint();
-        frame.invalidate();
-        frame.validate();
+            frame.repaint();
+            frame.invalidate();
+            frame.validate();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
+
+/***************************************************************************************************************************/
 
     public static JPanel formatLabel(String out)
     {
@@ -193,12 +204,14 @@ public class Client implements ActionListener
         return panel;
     }
 
+/***************************************************************************************************************************/
     public static void main(String[] arg)
     {
         new Client();
 
         try
         {
+            @SuppressWarnings("resource")
             Socket socket = new Socket("127.0.0.1", 6001);
 
             DataInputStream d_in = new DataInputStream(socket.getInputStream());
@@ -213,6 +226,10 @@ public class Client implements ActionListener
                     JPanel left = new JPanel(new BorderLayout());
                     left.add(panel, BorderLayout.LINE_START);
                     vertical.add(left);
+
+                    vertical.add(Box.createVerticalStrut(15));
+                    panel2.add(vertical, BorderLayout.PAGE_START);
+
                     frame.validate();
                 }
         }

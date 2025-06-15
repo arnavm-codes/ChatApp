@@ -25,9 +25,9 @@ public class Client implements ActionListener
     {
         frame.setLayout(null);
 
-        // green panel at top
+        // grey panel at top
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(7,94,84));
+        panel_1.setBackground(new Color(51,51,51));
         panel_1.setBounds(0,0,450,70);
         frame.add(panel_1);
 
